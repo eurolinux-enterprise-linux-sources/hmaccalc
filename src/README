@@ -1,0 +1,38 @@
+Usage
+-----
+
+The sha1hmac/sha256hmac/sha384hmac/sha512hmac command can compute and/or
+verify HMAC and unkeyed checksum values for the contents of files.  If
+you're familiar with the sha1sum/sha224sum/sha256sum/sha384sum/sha512sum
+command from the "coreutils" package, then you already have a good idea
+of how to use these HMAC tools.
+
+The key difference is that when calculating an HMAC value, a key is
+used, and that same key must be used when verifying the HMAC.  These
+tools accept the key to be used either directly as a command-line
+argument (-K), or from the contents of a file whose name is passed on
+the command-line as an argument (-k).  (While a compiled-in key will be
+used if neither is given, reliance on this behavior is discouraged.)
+
+Implementation
+--------------
+
+The HMAC values are computed as described by RFC2104, and the results
+produced by the tools should exactly match test vectors published in
+RFC2202 and RFC4231.
+
+The HMAC tools will perform a self-test using a compiled-in key and a
+prepackaged value each time they are run.
+
+Notes
+-----
+
+If you intend to use these tools to ensure that a binary has not been
+tampered with, the verification has to be done prior to handing any
+sensitive information to the binary which is being verified.
+
+For example, if the tools are used to verify a kernel or kernel modules,
+this verification must be done before any of the binaries being checked
+are given any sensitive information.  This means that the verification
+must be completed before any attempt is made to access encrypted disks
+using dm-crypt.
