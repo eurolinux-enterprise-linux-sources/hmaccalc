@@ -13,13 +13,14 @@
 
 Name:		hmaccalc
 Version:	0.9.12
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	Tools for computing and checking HMAC values for files
 
 Group:		System Environment/Base
 License:	MIT
 URL:		https://fedorahosted.org/hmaccalc/
 Source0:	https://fedorahosted.org/released/hmaccalc/hmaccalc-%{version}.tar.gz
+Patch0:		hmaccalc-0.9.12-0.9.13.patch
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 BuildRequires:	nss-devel, prelink
@@ -31,6 +32,7 @@ meant to mimic the sha*sum tools provided by the coreutils package.
 
 %prep
 %setup -q
+%patch0 -p1 -b .0.9.13
 
 %build
 %configure --enable-sum-directory=%{_libdir}/%{name}
@@ -61,9 +63,14 @@ make check
 %{_mandir}/*/*
 
 %changelog
+* Tue Mar 25 2014 Nalin Dahyabhai <nalin@redhat.com> 0.9.12-2
+- backport fix to treat unexpected command-line arguments as an error to
+  avoid setting incorrect expectations, and warn when a check file doesn't
+  appear to contain anything for us to check (#1016706)
+
 * Tue Dec 15 2009 Nalin Dahyabhai <nalin@redhat.com> 0.9.12-1
 - fix regression of #512275 -- we looked for prelink, but didn't record
-  its location properly
+  its location properly (#548438)
 
 * Mon Nov 30 2009 Dennis Gregorovic <dgregor@redhat.com> - 0.9.11-1.1
 - Rebuilt for RHEL 6
