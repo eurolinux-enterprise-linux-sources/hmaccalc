@@ -13,7 +13,7 @@
 
 Name:		hmaccalc
 Version:	0.9.13
-Release:	1%{?dist}
+Release:	4%{?dist}
 Summary:	Tools for computing and checking HMAC values for files
 
 Group:		System Environment/Base
@@ -23,7 +23,11 @@ Source0:	https://fedorahosted.org/released/hmaccalc/hmaccalc-%{version}.tar.gz
 Source1:	https://fedorahosted.org/released/hmaccalc/hmaccalc-%{version}.tar.gz.sig
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
+%ifarch %{ix86} x86_64 ppc ppc64 s390 s390x
 BuildRequires:	nss-devel, prelink
+%else
+BuildRequires:	nss-devel
+%endif
 
 %description
 The hmaccalc package contains tools which can calculate HMAC (hash-based
@@ -62,6 +66,17 @@ make check
 %{_mandir}/*/*
 
 %changelog
+* Mon Feb 10 2014 Nalin Dahyabhai <nalin@redhat.com> - 0.9.13-4
+- only BuildRequire: prelink on the arches on which we know it runs (currently
+  %%{ix86}, x86_64, ppc, ppc64, s390, s390x), so that it can be built on the
+  rest (#1061889)
+
+* Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 0.9.13-3
+- Mass rebuild 2014-01-24
+
+* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 0.9.13-2
+- Mass rebuild 2013-12-27
+
 * Mon Oct 14 2013 Nalin Dahyabhai <nalin@redhat.com> - 0.9.13-1
 - treat unexpected command-line arguments as an error to avoid setting
   incorrect expectations, and warn when a check file doesn't appear to
